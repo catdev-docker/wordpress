@@ -21,7 +21,9 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: catdevops/wordpress # list of Docker images to use as base name for tags
-          tag-sha: true # add git short SHA as Docker tag
+          tag-semver: |
+            {{version}}
+            {{major}}.{{minor}}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -44,5 +46,5 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
+          tag_with_ref: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
